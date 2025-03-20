@@ -1,10 +1,11 @@
-// main.js - Cat Boot Logic
-
+// main.js - Chatbot Logic
 import { API_URL } from "./config.js";
 
+// Événement d'écoute des touches et boutons
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("userInput").addEventListener("keypress", handleKeyPress);
     document.querySelector("button").addEventListener("click", sendMessage);
+    document.getElementById("micButton").addEventListener("click", startListening);
 });
 
 async function sendMessage() {
@@ -40,14 +41,14 @@ async function sendMessage() {
 
         const botMessage = document.createElement("div");
         botMessage.classList.add("message", "bot-message");
-        botMessage.textContent = data.reply || data.output || "Error in response";
+        botMessage.textContent = data.reply || data.output || "Erreur dans la réponse";
         chatMessages.appendChild(botMessage);
         chatMessages.scrollTop = chatMessages.scrollHeight;
     } catch (error) {
         console.error("API Error:", error);
         const errorMessage = document.createElement("div");
         errorMessage.classList.add("message", "bot-message");
-        errorMessage.textContent = "Unable to contact AI.";
+        errorMessage.textContent = "Impossible de contacter l'IA.";
         chatMessages.appendChild(errorMessage);
     }
 }
@@ -57,3 +58,24 @@ function handleKeyPress(event) {
         sendMessage();
     }
 }
+
+// 🎤 Fonctionnalité de Microphone
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = new SpeechRecognition();
+recognition.lang = "fr-FR";
+recognition.continuous = false;
+recognition.interimResults = false;
+
+function startListening() {
+    recognition.start();
+}
+
+recognition.onresult = function (event) {
+    const transcript = event.results[0][0].transcript;
+    document.getElementById("userInput").value = transcript;
+    sendMessage();
+};
+
+recognition.onerror = function (event) {
+    console.error("Erreur de reconnaissance vocale:", event.error);
+};
