@@ -1,4 +1,4 @@
-/* styles.css - Adapté iPhone + Bug Fix Micro */
+/* styles.css - Optimized for iPhone UX */
 
 body {
   font-family: Arial, sans-serif;
@@ -9,6 +9,7 @@ body {
   height: 100vh;
   margin: 0;
   color: #fff;
+  overflow: hidden;
 }
 
 .chat-container {
@@ -59,71 +60,58 @@ body {
 
 .chat-input {
   display: flex;
-  padding: 12px;
+  padding: 10px;
   border-top: 1px solid #444;
   background: #2a2a2a;
-  align-items: center;
-  gap: 12px; /* Espacement augmenté */
-  padding-bottom: env(safe-area-inset-bottom); /* Évite que les coins cachent les boutons */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding-bottom: env(safe-area-inset-bottom, 10px); /* Fix for iPhone bottom notch */
 }
 
 .chat-input input {
   flex: 1;
-  padding: 14px;
+  padding: 10px;
   border: 1px solid #444;
   border-radius: 5px;
   background: #1c1c1c;
   color: white;
-  font-size: 16px; /* Empêche le zoom */
+  margin-right: 10px;
+  font-size: 16px; /* Prevent zoom on mobile */
 }
 
-/* ✅ Correction du positionnement des boutons */
 .chat-input button {
   background: #4CAF50;
   color: white;
   border: none;
-  padding: 14px 18px;
+  padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
 }
 
-/* ✅ Bouton Micro : Désactive toute interaction involontaire */
 .microphone-button {
-  user-select: none;
+  user-select: none; /* Prevent text selection */
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  pointer-events: auto;
-  touch-action: none;
-  font-size: 24px; /* Agrandit pour meilleure accessibilité */
+  touch-action: manipulation; /* Prevent unwanted long-press selection */
+  margin-left: 10px;
 }
 
-/* ✅ Désactivation complète de la sélection */
-.microphone-button:focus,
-.microphone-button:active {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-/* ✅ Correction iPhone - Plus de boutons invisibles */
+/* Mobile Styles */
 @media screen and (max-width: 600px) {
   .chat-container {
     height: 100vh;
     width: 100vw;
     border-radius: 0;
   }
-
   .chat-input {
-    padding: 14px;
-    justify-content: space-between;
+    padding: 10px;
   }
-
   .chat-input button {
     flex-shrink: 0;
-  }
-
-  .microphone-button {
-    font-size: 28px; /* Ajustement pour l'accessibilité */
+    margin-left: 5px;
   }
 }
