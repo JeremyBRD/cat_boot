@@ -1,59 +1,13 @@
-// main.js - Bug Fix iPhone + Micro 🚀🔥
+""// main.js - Chatbot Script (No Push-To-Talk Version)
+
 import { API_URL } from "./config.js";
 
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.getRegistrations().then((registrations) => {
-    for (let registration of registrations) {
-      registration.unregister(); // Supprime les anciens service workers
-    }
-  });
-
-  navigator.serviceWorker.register("/service-worker.js", { scope: "/" })
-    .then((reg) => {
-      console.log("Service Worker enregistré avec succès !");
-    })
-    .catch((err) => {
-      console.error("Erreur d'enregistrement du Service Worker :", err);
-    });
-}
-
-
 document.addEventListener("DOMContentLoaded", () => {
-    const userInput = document.getElementById("userInput");
-    const chatMessages = document.getElementById("chatMessages");
-    const sendButton = document.getElementById("sendButton");
-    const micButton = document.getElementById("micButton");
-
-    userInput.addEventListener("keypress", handleKeyPress);
-    sendButton.addEventListener("click", sendMessage);
-    micButton.addEventListener("mousedown", startRecording);
-    micButton.addEventListener("mouseup", stopRecording);
-
-    /* ✅ Empêche toute sélection et focus du bouton micro */
-    micButton.addEventListener("mousedown", (event) => event.preventDefault());
-    micButton.addEventListener("contextmenu", (event) => event.preventDefault());
-    micButton.addEventListener("focus", (event) => {
-        event.preventDefault();
-        micButton.blur();
-    });
-    micButton.addEventListener("click", () => micButton.blur());
-
-    /* ✅ Désactive définitivement la sélection sur mobile */
-    micButton.setAttribute("unselectable", "on");
-    micButton.style.userSelect = "none";
-    micButton.style.webkitUserSelect = "none";
-
-    /* ✅ Demande d'autorisation micro en une fois */
-    if (localStorage.getItem("micPermission") !== "granted") {
-        navigator.mediaDevices.getUserMedia({ audio: true }).then(() => {
-            localStorage.setItem("micPermission", "granted");
-        }).catch(() => {
-            console.warn("L'utilisateur a refusé l'accès au micro.");
-        });
-    }
+    document.getElementById("userInput").addEventListener("keypress", handleKeyPress);
+    document.getElementById("sendButton").addEventListener("click", sendMessage);
+    document.getElementById("micButton").addEventListener("click", startVoiceRecognition);
 });
 
-/* ✅ Fonction pour envoyer un message */
 async function sendMessage() {
     const userInput = document.getElementById("userInput");
     const chatMessages = document.getElementById("chatMessages");
@@ -68,7 +22,7 @@ async function sendMessage() {
     chatMessages.scrollTop = chatMessages.scrollHeight;
 
     try {
-        console.log("Envoi du message :", messageText);
+        console.log("Sending message:", messageText);
         const response = await fetch(API_URL, {
             method: "POST",
             mode: "cors",
@@ -79,11 +33,11 @@ async function sendMessage() {
         });
 
         if (!response.ok) {
-            throw new Error(`Erreur HTTP: ${response.status}`);
+            throw new Error(`HTTP Error: ${response.status}`);
         }
 
         const data = await response.json();
-        console.log("Données reçues :", data);
+        console.log("Received data:", data);
 
         const botMessage = document.createElement("div");
         botMessage.classList.add("message", "bot-message");
@@ -91,7 +45,7 @@ async function sendMessage() {
         chatMessages.appendChild(botMessage);
         chatMessages.scrollTop = chatMessages.scrollHeight;
     } catch (error) {
-        console.error("Erreur API :", error);
+        console.error("API Error:", error);
         const errorMessage = document.createElement("div");
         errorMessage.classList.add("message", "bot-message");
         errorMessage.textContent = "Impossible de contacter l'IA.";
@@ -99,60 +53,26 @@ async function sendMessage() {
     }
 }
 
-/* ✅ Gestion du micro (Push-to-Talk) */
-let mediaRecorder;
-let audioChunks = [];
-
-function startRecording() {
-    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-        mediaRecorder = new MediaRecorder(stream);
-        mediaRecorder.start();
-
-        mediaRecorder.addEventListener("dataavailable", event => {
-            audioChunks.push(event.data);
-        });
-    }).catch(error => {
-        console.error("Erreur d'accès au micro :", error);
-    });
-}
-
-function stopRecording() {
-    if (mediaRecorder && mediaRecorder.state !== "inactive") {
-        mediaRecorder.stop();
-
-        mediaRecorder.addEventListener("stop", () => {
-            const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-            sendAudio(audioBlob);
-            audioChunks = [];
-        });
-    }
-}
-
-/* ✅ Fonction pour envoyer l'audio */
-async function sendAudio(audioBlob) {
-    const formData = new FormData();
-    formData.append("audio", audioBlob);
-
-    try {
-        const response = await fetch(API_URL + "/audio", {
-            method: "POST",
-            body: formData
-        });
-
-        if (!response.ok) {
-            throw new Error(`Erreur HTTP: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log("Réponse de l'API :", data);
-    } catch (error) {
-        console.error("Erreur d'envoi audio :", error);
-    }
-}
-
-/* ✅ Gestion du clavier */
 function handleKeyPress(event) {
     if (event.key === "Enter") {
         sendMessage();
     }
 }
+
+// Voice Recognition (No PTT)
+function startVoiceRecognition() {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = "fr-FR";
+
+    recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById("userInput").value = transcript;
+        sendMessage();
+    };
+
+    recognition.onerror = function(event) {
+        console.error("Voice recognition error:", event.error);
+    };
+
+    recognition.start();
+}""
