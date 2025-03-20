@@ -1,3 +1,4 @@
+// main.js - Bug Fix iPhone + Micro 🚀🔥
 import { API_URL } from "./config.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -11,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     micButton.addEventListener("mousedown", startRecording);
     micButton.addEventListener("mouseup", stopRecording);
 
+    /* ✅ Empêche toute sélection et focus du bouton micro */
     micButton.addEventListener("mousedown", (event) => event.preventDefault());
     micButton.addEventListener("contextmenu", (event) => event.preventDefault());
     micButton.addEventListener("focus", (event) => {
@@ -19,6 +21,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     micButton.addEventListener("click", () => micButton.blur());
 
+    /* ✅ Désactive définitivement la sélection sur mobile */
+    micButton.setAttribute("unselectable", "on");
+    micButton.style.userSelect = "none";
+    micButton.style.webkitUserSelect = "none";
+
+    /* ✅ Demande d'autorisation micro en une fois */
     if (localStorage.getItem("micPermission") !== "granted") {
         navigator.mediaDevices.getUserMedia({ audio: true }).then(() => {
             localStorage.setItem("micPermission", "granted");
@@ -28,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+/* ✅ Fonction pour envoyer un message */
 async function sendMessage() {
     const userInput = document.getElementById("userInput");
     const chatMessages = document.getElementById("chatMessages");
@@ -73,6 +82,7 @@ async function sendMessage() {
     }
 }
 
+/* ✅ Gestion du micro (Push-to-Talk) */
 let mediaRecorder;
 let audioChunks = [];
 
@@ -101,6 +111,7 @@ function stopRecording() {
     }
 }
 
+/* ✅ Fonction pour envoyer l'audio */
 async function sendAudio(audioBlob) {
     const formData = new FormData();
     formData.append("audio", audioBlob);
@@ -122,6 +133,7 @@ async function sendAudio(audioBlob) {
     }
 }
 
+/* ✅ Gestion du clavier */
 function handleKeyPress(event) {
     if (event.key === "Enter") {
         sendMessage();
