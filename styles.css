@@ -64,10 +64,10 @@ body {
   border-top: 1px solid #444;
   background: #2a2a2a;
   position: fixed;
-  bottom: 0;
+  bottom: 12px;
   left: 0;
   width: 100%;
-  padding-bottom: env(safe-area-inset-bottom, 10px); /* Fix for iPhone bottom notch */
+  padding-bottom: env(safe-area-inset-bottom, 10px);
 }
 
 .chat-input input {
@@ -78,7 +78,7 @@ body {
   background: #1c1c1c;
   color: white;
   margin-right: 10px;
-  font-size: 16px; /* Prevent zoom on mobile */
+  font-size: 16px;
 }
 
 .chat-input button {
