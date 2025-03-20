@@ -20,3 +20,19 @@ self.addEventListener("fetch", (event) => {
       })
   );
 });
+
+self.addEventListener("install", (event) => {
+  self.skipWaiting(); // Force l'update immédiate
+});
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cache) => {
+          return caches.delete(cache); // Supprime toutes les anciennes versions du cache
+        })
+      );
+    })
+  );
+});

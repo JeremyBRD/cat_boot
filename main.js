@@ -1,6 +1,23 @@
 // main.js - Bug Fix iPhone + Micro 🚀🔥
 import { API_URL } from "./config.js";
 
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    for (let registration of registrations) {
+      registration.unregister(); // Supprime les anciens service workers
+    }
+  });
+
+  navigator.serviceWorker.register("/service-worker.js", { scope: "/" })
+    .then((reg) => {
+      console.log("Service Worker enregistré avec succès !");
+    })
+    .catch((err) => {
+      console.error("Erreur d'enregistrement du Service Worker :", err);
+    });
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
     const userInput = document.getElementById("userInput");
     const chatMessages = document.getElementById("chatMessages");
