@@ -1,11 +1,15 @@
-""// main.js - Chatbot Script (No Push-To-Talk Version)
+// main.js - Chatbot Script (No Push-To-Talk Version)
 
 import { API_URL } from "./config.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("userInput").addEventListener("keypress", handleKeyPress);
-    document.getElementById("sendButton").addEventListener("click", sendMessage);
-    document.getElementById("micButton").addEventListener("click", startVoiceRecognition);
+    const userInput = document.getElementById("userInput");
+    const sendButton = document.getElementById("sendButton");
+    const micButton = document.getElementById("micButton");
+
+    if (userInput) userInput.addEventListener("keypress", handleKeyPress);
+    if (sendButton) sendButton.addEventListener("click", sendMessage);
+    if (micButton) micButton.addEventListener("click", startVoiceRecognition);
 });
 
 async function sendMessage() {
@@ -61,18 +65,22 @@ function handleKeyPress(event) {
 
 // Voice Recognition (No PTT)
 function startVoiceRecognition() {
-    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    recognition.lang = "fr-FR";
+    try {
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = "fr-FR";
 
-    recognition.onresult = function(event) {
-        const transcript = event.results[0][0].transcript;
-        document.getElementById("userInput").value = transcript;
-        sendMessage();
-    };
+        recognition.onresult = function(event) {
+            const transcript = event.results[0][0].transcript;
+            document.getElementById("userInput").value = transcript;
+            sendMessage();
+        };
 
-    recognition.onerror = function(event) {
-        console.error("Voice recognition error:", event.error);
-    };
+        recognition.onerror = function(event) {
+            console.error("Voice recognition error:", event.error);
+        };
 
-    recognition.start();
-}""
+        recognition.start();
+    } catch (error) {
+        console.error("Speech Recognition is not supported in this browser.");
+    }
+}
