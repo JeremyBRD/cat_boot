@@ -1,5 +1,4 @@
-// main.js - Cat Boot Logic
-
+// main.js - Chatbot Logic
 import { API_URL } from "./config.js";
 
 // Événement d'écoute des touches et boutons
