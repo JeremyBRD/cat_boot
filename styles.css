@@ -70,7 +70,7 @@ body {
   background: #1c1c1c;
   color: white;
   margin-right: 10px;
-  font-size: 16px; /* Prevent zoom on mobile */
+  font-size: 16px;
 }
 
 .chat-input button {
@@ -90,18 +90,24 @@ body {
     width: 100vw;
     border-radius: 0;
   }
+  .chat-input {
+    margin-bottom: 15px;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .chat-input input {
+    margin-bottom: 5px;
+  }
   .chat-input button {
     flex-shrink: 0;
-    margin-left: 5px; /* Space between send and mic button */
+    margin-left: 5px;
+    margin-right: 10px;
   }
   .microphone-button {
-    user-select: none; /* Prevent mobile text selection */
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-  }
-  .chat-input {
-    margin-bottom: 10px;
-    padding-bottom: env(safe-area-inset-bottom);
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    touch-action: none !important;
+    pointer-events: auto !important;
   }
 }
