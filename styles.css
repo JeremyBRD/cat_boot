@@ -14,7 +14,6 @@ body {
 
 .chat-container {
   width: 100%;
-  max-width: 600px;
   height: 100vh;
   background: #2a2a2a;
   border-radius: 10px;
@@ -34,6 +33,7 @@ body {
 
 .chat-messages {
   padding: 15px;
+  padding-bottom: 75px;
   flex: 1;
   overflow-y: auto;
   display: flex;
@@ -66,7 +66,7 @@ body {
   position: fixed;
   bottom: 0;
   left: 0;
-  width: 100%;
+  width: 95%;
   padding-bottom: env(safe-area-inset-bottom, 10px);
 }
 
@@ -109,7 +109,7 @@ body {
   }
   .chat-input {
     padding: 10px;
-    bottom: 15px;
+    padding-bottom: 25px;
   }
   .chat-input button {
     flex-shrink: 0;
