@@ -96,8 +96,12 @@ body {
   }
   .microphone-button {
     user-select: none; /* Prevent mobile text selection */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
   }
   .chat-input {
     margin-bottom: 10px;
+    padding-bottom: env(safe-area-inset-bottom);
   }
 }
