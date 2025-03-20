@@ -66,7 +66,7 @@ body {
   position: fixed;
   bottom: 0;
   left: 0;
-  width: 95%;
+  width: -webkit-fill-available;
   padding-bottom: env(safe-area-inset-bottom, 10px);
 }
 
