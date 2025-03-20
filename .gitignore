@@ -1,0 +1,5 @@
+# Ignorer les fichiers d'environnement sensibles
+.env
+.env.local
+.env.production
+.env.development

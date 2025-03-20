@@ -1,0 +1,13 @@
+{
+  "name": "jerembot",
+  "version": "1.0.0",
+  "description": "Chatbot utilisant N8N",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7"
+  }
+}
