@@ -1,4 +1,4 @@
-// main.js - Chatbot Logic
+// main.js - Cat Boot Logic
 
 import { API_URL } from "./config.js";
 
